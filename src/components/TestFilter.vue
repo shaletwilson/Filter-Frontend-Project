@@ -29,15 +29,21 @@
                   </div>
                 </div>
               </div>
-                <div class="row">
-                  <div class="row col-md-3 mx-auto">
-                  <button class="btn btn-success mt-2" @click="fetchData">Filter<i class="material-icons">filter_alt</i></button>
+              <div class="row button-row">
+                  <div class="col-md-6 text-center">
+                    <button class="btn btn-success mt-2 filter-button" @click="fetchData">
+                      <span class="material-icons align-middle">filter_alt</span>
+                      Filter
+                    </button>
                   </div>
-                
-                  <div class="row col-md-3 mx-auto">
-                    <button class="btn btn-secondary mt-2" @click="resetFilter"><span class="material-icons">backspace</span>Reset</button>
+                  
+                  <div class="col-md-6 text-right">
+                    <button class="btn btn-secondary mt-2 reset-button" @click="resetFilter">
+                      <span class="material-icons align-middle">backspace</span>
+                      Reset
+                    </button>
                   </div>
-              </div>
+    </div>
             </div>
           </div>
     </div>
@@ -77,6 +83,55 @@
       </tbody>
     
     </table>
+    
+  <div class="pagination-container">
+    <div class="row align-items-center">
+      <div class="pagination-controls">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <button class="page-link" @click="goToPreviousPage" :disabled="!prevPageUrl" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </button>
+            </li>
+            <li class="page-item"><span class="page-link">{{ currentPage }}</span></li>
+            <li class="page-item">
+              <button class="page-link" @click="goToNextPage" :disabled="!nextPageUrl" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </button>
+            </li>
+          </ul>
+          <p>{{ currentPage }} of {{ totalPages }} pages</p>
+        </nav>
+        <div class="pagination-info">
+        <p>Total records: {{ totalCount }}</p>
+      </div>
+      </div>
+      
+      
+    </div>
+  </div>
+
+
+    <!-- <div class="pagination-container">
+      <div class="row align-items-center">
+        <div class="pagination-controls">
+          <button class="button" @click="goToPreviousPage" :disabled="!prevPageUrl">
+          <span class="material-icons">skip_previous</span>Previous</button>
+          <button class="button next-button" @click="goToNextPage" :disabled="!nextPageUrl">
+            Next<span class="material-icons">skip_next</span></button>
+        </div>
+      
+        <div class="pagination-info">
+          <p>Total records: {{ totalCount }}</p>
+        </div>
+
+        <div class="pagination-page-num">
+          <p>{{ currentPage }} of {{ totalPages }} pages</p>
+        </div>
+      </div>
+    </div> -->
+
     </div>
     
 </template>
@@ -94,6 +149,12 @@ export default {
   data() {
     return {
       loading: false,
+      pageSize: 100, 
+      currentPage: 1, 
+      totalPages: 1, 
+      totalCount: 0,
+      nextPageUrl: null,
+      prevPageUrl: null,
       flights: [],
       filteredFlights: [],
       selectedColumn: '',
@@ -108,24 +169,52 @@ export default {
     this.fetchData();
   },
   methods: {
+    goToNextPage() {
+      if (this.nextPageUrl) {
+        this.currentPage += 1;
+        this.fetchData();
+      }
+    },
+    goToPreviousPage() {
+      if (this.prevPageUrl) {
+        this.currentPage -= 1;
+        this.fetchData();
+      }
+    },
+
     async fetchData() {
       this.loading = true;
       try {
-        console.log("column", this.selectedColumn)
-        console.log("selectedCondition", this.selectedCondition)
-        console.log("filterValue", this.filterValue)
-        const response = await axios.post('filter-api/', {
+        const queryParams = new URLSearchParams({
           column: this.selectedColumn,
           condition: this.selectedCondition,
           value: this.filterValue,
+          page: this.currentPage,
         });
+
+        const response = await axios.get(`/filter-api/?${queryParams.toString()}`);
+        
+
+        // const response = await axios.post('filter-api/', {
+        //   column: this.selectedColumn,
+        //   condition: this.selectedCondition,
+        //   value: this.filterValue,
+        // });
+        console.log("dataccccccccccccccccccccccc")
+        console.log(response.data.results)
         if(response.data.response == 'NO Data') {
             this.message = response.data.message;
           }
         else {
-          this.filteredFlights = response.data.response;
-          console.log("this.data", this.filteredFlights)
-          this.message = response.data.message
+          this.filteredFlights = response.data.results;
+          this.message = response.data.message;
+          this.totalPages = Math.ceil(response.data.count / this.pageSize);
+          this.totalCount = response.data.count;
+          console.log("count", this.totalCount)
+          this.nextPageUrl = response.data.next;
+          this.prevPageUrl = response.data.previous;
+          console.log("nextPageUrl", this.nextPageUrl)
+          console.log("prevPageUrl", this.prevPageUrl)
         }
         
         
@@ -141,7 +230,8 @@ export default {
       this.selectedColumn = '';
       this.selectedCondition = '';
       this.filterValue = '';
-      // this.filteredFlights = this.filteredFlights;
+      this.filteredFlights = '';
+      this.currentPage = 1;
     },
   },
   
@@ -151,6 +241,11 @@ export default {
 </script>
 
 <style>
+
+nav {
+    padding: 27px;
+    padding-left: 262px;
+}
 
 table {
   font-family: 'Open Sans', sans-serif;
@@ -209,5 +304,26 @@ table tbody tr:nth-child(2n) td {
   text-align: right;
 }
 
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* Adjust as needed */
+}
+
+.filter-button, .reset-button {
+  display: flex;
+  align-items: center;
+}
+
+.filter-button .material-icons, .reset-button .material-icons {
+  margin-right: 10px; /* Adjust icon spacing */
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    margin-left: 106px;
+}
 
 </style>

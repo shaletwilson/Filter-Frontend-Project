@@ -150,8 +150,13 @@
     }
     .mt-2 {
         margin-top: 1.5rem!important;
+        margin-right: 25%;
     }
 
+    .mb-4 {
+        margin-bottom: 1.5rem!important;
+        margin-top: 12px;
+}
 
 </style>
   
