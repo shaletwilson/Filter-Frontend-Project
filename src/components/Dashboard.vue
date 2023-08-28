@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card mx-auto col-md-8">
-            <div class="card-header" @click="toggleFilter">
+            <div class="card-header">
               <h5 class="mb-0">Filter</h5>
             </div>
             <div class="card-body">
@@ -24,26 +24,39 @@
                   </select>
                 </div>
                 <div class="col">
-                  
-                  <input
-                    class="form-control"
-                    v-model="filterValue"
-                    :disabled="!selectedColumn || !selectedCondition"
-                    type="text"
-                    placeholder="Enter value"
-                  />
+                  <div class="form-control">
+                    <input v-model="filterValue" placeholder="Value" />
+                  </div>
                 </div>
               </div>
-                
-                <div class="row col-md-3 mx-auto  ">
-                  <button class="btn btn-secondary mt-2" @click="resetFilter">Reset</button>
-                </div>
+              <div class="row button-row justify-content-center">
+                  <div class="col-md-6 text-center" style="width: 17%;">
+                    <button class="btn btn-success mt-2 filter-button" @click="fetchData">
+                      Filter
+                      <span class="material-icons align-middle">filter_alt</span>
+                      
+                    </button>
+                  </div>
+                  
+                  <div class="col-md-6 text-right" style="width: 17%;">
+                    <button class="btn btn-secondary mt-2 reset-button" @click="resetFilter">
+                      Reset
+                      <span class="material-icons align-middle">refresh</span>
+                      
+                    </button>
+                  </div>
             </div>
           </div>
+        </div>
     </div>
       </div>
-    
-    <table class="table-fluid mx-auto mt-4" id="flight-table">
+
+      <div v-if="loading" class="spinner-border" role="status">
+        <span class="sr-only"></span>
+      </div>
+      <p v-if="message" class="h4 text-danger">{{ this.message }}</p>
+      
+    <table  v-else class="table-fluid mx-auto mt-4" id="flight-table">
       <thead>
         <tr>
           <th>ID</th>
@@ -54,24 +67,58 @@
           <th>View Specification</th>
         </tr>
       </thead>
+        
       <tbody>
-        <tr v-for="flight in filteredFlights" :key="flight.icao_code">
+        <tr v-for="flight in filteredFlights" :key="flight.id">
           <td>{{ flight.id }}</td>
           <td>{{ flight.icao_code }}</td>
           <td>{{ flight.manufacturer }}</td>
           <td>{{ flight.type_model }}</td>
           <td>{{ flight.Max_takeoff_weight }}</td>
           <td>
-            <router-link :to="{ name: 'details', params: { id: flight.id } }" class="button">
-              <span class="material-icons">visibility</span>
+            <router-link :to="{ name: 'details', params: { id: flight.id } }" class="button text-center">
+              <span style="color: var(--primary);" class="material-icons">visibility</span>
             </router-link>
           </td>
           
         </tr>
       </tbody>
+    
     </table>
+    
+  <div class="pagination-container ">
+    <div class="row md-12">
+      <div class="pagination-controls justify-content-center">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pagination-md ">
+            <li class="page-item">
+              <button class="page-link " :class="{disabled:currentPage==1}" @click="goToPage(currentPage-1)" :disabled="!prevPageUrl" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </button>
+            </li>
+            <li v-if="currentPage > 1" @click="goToPage(currentPage-1)" class="page-item"><span class="btn page-link">{{ currentPage-1}}</span></li>
+            <li class="page-item"><span class="btn page-link active ">{{ currentPage }}</span></li>
+            <li v-if="currentPage < totalPages" class="page-item"><span class="btn page-link" @click="goToPage(currentPage+1)">{{ currentPage+1}}</span></li>
+            <li v-if="currentPage == 1" class="page-item" @click="goToPage(currentPage+2)"><span class="btn page-link">{{ currentPage+2}}</span></li>
+            <li class="page-item">
+              <button class="page-link" :class="{disabled:currentPage==totalPages}"  @click="goToPage(currentPage+1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+    <div class="row pagination-info">
+        <span>{{ currentPage }} of {{ totalPages }} pages</span>
+        <span>Total records : {{ totalCount }}</span>
+    </div>
+      
+      
 
-    <div class="pagination-container">
+
+    <!-- <div class="pagination-container">
       <div class="row align-items-center">
         <div class="pagination-controls">
           <button class="button" @click="goToPreviousPage" :disabled="!prevPageUrl">
@@ -80,15 +127,16 @@
             Next<span class="material-icons">skip_next</span></button>
         </div>
       
-      <div class="pagination-info">
-        <p>Total records: {{ totalCount }}</p>
-      </div>
+        <div class="pagination-info">
+          <p>Total records: {{ totalCount }}</p>
+        </div>
 
-      <div class="pagination-page-num">
-        <p>{{ currentPage }} of {{ totalPages }} pages</p>
+        <div class="pagination-page-num">
+          <p>{{ currentPage }} of {{ totalPages }} pages</p>
+        </div>
       </div>
-    </div>
-  </div>
+    </div> -->
+
     </div>
     
 </template>
@@ -97,167 +145,133 @@
 import axios from 'axios';
 import SideBar from '@/components/SideBar.vue';
 
+
 export default {
-  name: 'Dashboard',
+  name: 'TestFilter',
   components: {
     SideBar
   },
   data() {
     return {
+      loading: false,
       pageSize: 100, 
       currentPage: 1, 
       totalPages: 1, 
       totalCount: 0,
       nextPageUrl: null,
       prevPageUrl: null,
-      showFilter: false,
       flights: [],
       filteredFlights: [],
       selectedColumn: '',
       selectedCondition: '',
       filterValue: '',
-      columns: ['icao_code', 'manufacturer', 'Max_takeoff_weight'],
-      conditions: ['<', '>', '<=', '>=', '=', 'Contains', 'startswith'],
+      message: '',
+      columns: ['icao_code', 'manufacturer', 'Max_takeoff_weight', 'type_model'],
+      conditions: ['<', '>', '<=', '>=', '=', 'contains', 'startswith'],
     };
   },
   mounted() {
-    this.fetchFlightData();
+    this.fetchData();
   },
   methods: {
-    goToNextPage() {
+    goToPage(page) {
       if (this.nextPageUrl) {
-        this.currentPage += 1;
-        this.fetchFlightData();
+        window.scrollTo(0,0);
+        this.currentPage = page;
+        this.fetchData();
       }
     },
-    goToPreviousPage() {
-      if (this.prevPageUrl) {
-        this.currentPage -= 1;
-        this.fetchFlightData();
-      }
-    },
-    
-    async fetchFlightData() {
-      try {
-        
-        const response = await axios.get(`/flight-list/?page=${this.currentPage}`); 
-        console.log(response)
-        this.flights = response.data.results;
-        this.totalPages = Math.ceil(response.data.count / this.pageSize);
-        this.totalCount = response.data.count;
-        this.nextPageUrl = response.data.next;
-        this.prevPageUrl = response.data.previous;
-        
-      } catch (error) {
-        console.error('Error fetching flight data:', error);
-      }
-    },
-    toggleFilter() {
-        this.showFilter = !this.showFilter;
-      },
-    applyFilter() {
-        console.log("Inside filter")
-        const column = this.selectedColumn;
-        const condition = this.selectedCondition;
-        const value = this.filterValue;
-  
-        if (column && condition && value !== '') {
-          this.filteredFlights = this.flights.filter((flight) => {
-            switch (condition) {
-              case '<':
-                return parseFloat(flight[column]) < parseFloat(value);
-              case '>':
-                return parseFloat(flight[column]) > parseFloat(value);
-              case '<=':
-                return parseFloat(flight[column]) <= parseFloat(value);
-              case '>=':
-                return parseFloat(flight[column]) >= parseFloat(value);
-              case '=':
-                return flight[column].toString().toLowerCase() === value.toLowerCase();
-              case 'Contains':
-                return flight[column].toString().toLowerCase().includes(value.toLowerCase());
-              case 'startswith':
-                return flight[column].toString().toLowerCase().startsWith(value.toLowerCase());
-              
-              default:
-                return true;
-            }
-          });
-        } 
-      },
 
+    async fetchData() {
+      this.loading = true;
+      try {
+        const queryParams = new URLSearchParams({
+          column: this.selectedColumn,
+          condition: this.selectedCondition,
+          value: this.filterValue,
+          page: this.currentPage,
+        });
+
+        const response = await axios.get(`/filter-api/?${queryParams.toString()}`);
+        
+
+        // const response = await axios.post('filter-api/', {
+        //   column: this.selectedColumn,
+        //   condition: this.selectedCondition,
+        //   value: this.filterValue,
+        // });
+        console.log("dataccccccccccccccccccccccc")
+        console.log(response.data.results)
+        if(response.data.response == 'NO Data') {
+            this.message = response.data.message;
+          }
+        else {
+          this.filteredFlights = response.data.results;
+          this.message = response.data.message;
+          this.totalPages = Math.ceil(response.data.count / this.pageSize);
+          this.totalCount = response.data.count;
+          console.log("count", this.totalCount)
+          this.nextPageUrl = response.data.next;
+          this.prevPageUrl = response.data.previous;
+          console.log("nextPageUrl", this.nextPageUrl)
+          console.log("prevPageUrl", this.prevPageUrl)
+          console.log("filteredFlights");
+          console.log(this.filteredFlights);
+        }
+        
+        
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      finally {
+        this.loading = false;
+      }
+    },
     resetFilter() {
       this.selectedColumn = '';
       this.selectedCondition = '';
       this.filterValue = '';
-      this.filteredFlights = this.flights;
+      this.filteredFlights = '';
+      this.currentPage = 1;
     },
   },
-  computed: {
-    
-    
-    // Updated filteredFlights to handle filtering
-    filteredFlights() {
-      if (!this.selectedColumn || !this.selectedCondition || !this.filterValue) {
-        // If no filter is selected, show all flights
-        return this.flights;
-      }
-      
-      const column = this.selectedColumn;
-      const condition = this.selectedCondition;
-      const value = this.filterValue;
-
-      // Apply filtering based on the selected column, condition, and value
-      return this.flights.filter((flight) => {
-        switch (condition) {
-          case '<':
-            return parseFloat(flight[column]) < parseFloat(value);
-          case '>':
-            return parseFloat(flight[column]) > parseFloat(value);
-          case '<=':
-            return parseFloat(flight[column]) <= parseFloat(value);
-          case '>=':
-            return parseFloat(flight[column]) >= parseFloat(value);
-          case '=':
-            return flight[column].toString().toLowerCase() === value.toLowerCase();
-          case 'Contains':
-              return flight[column].toString().toLowerCase().includes(value.toLowerCase());
-          case 'startswith':
-          return flight[column].toString().toLowerCase().startsWith(value.toLowerCase());
-          default:
-            return true;
-        }
-      });
-    },
-  },
+  
   
 };
 
 </script>
 
 <style>
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px; 
+}
+
+
 
 table {
   font-family: 'Open Sans', sans-serif;
   width: 750px;
   border-collapse: collapse;
-  border: 3px solid #44475C;
+  border: 3px solid var(--dark);
   margin: 10px 10px 0 10px;
 }
 
 table th {
   text-transform: uppercase;
-  text-align: left;
-  background: #44475C;
+  text-align: center;
+  background: var(--dark);
   color: #FFF;
   padding: 8px;
   min-width: 30px;
 }
 
 table td {
-  text-align: left;
+  text-align: center;
   padding: 8px;
-  border-right: 2px solid #7D82A8;
+  border-right: 2px solid var(--dark-transparent);
 }
 table td:last-child {
   border-right: none;
@@ -265,6 +279,7 @@ table td:last-child {
 table tbody tr:nth-child(2n) td {
   background: #D4D8F9;
 }
+
 
 .pagination-container {
   display: flex;
@@ -294,5 +309,27 @@ table tbody tr:nth-child(2n) td {
   text-align: right;
 }
 
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; 
+  margin-left: 346px;
+}
+
+.filter-button, .reset-button {
+  display: flex;
+  align-items: center;
+}
+
+.filter-button .material-icons, .reset-button .material-icons {
+  margin-right: 10px; /* Adjust icon spacing */
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    margin-left: 106px;
+}
 
 </style>

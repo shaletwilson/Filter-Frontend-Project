@@ -9,43 +9,52 @@
             </div>
             <div class="card-body">
               <div class="row align-items-center">
-                <div class="col">
-                  
-                  <select class="form-control" v-model="selectedColumn">
-                    <option value="">Select Column</option>
-                    <option v-for="column in columns" :value="column" :key="column">{{ column }}</option>
-                  </select>
-                </div>
-                <div class="col">
-                  
-                  <select class="form-control" v-model="selectedCondition">
-                    <option value="">Select Condition</option>
-                    <option v-for="condition in conditions" :value="condition" :key="condition">{{ condition }}</option>
-                  </select>
-                </div>
-                <div class="col">
-                  <div class="form-control">
-                    <input v-model="filterValue" placeholder="Value" />
+                <div v-for="(filter, index) in filters" :key="index" class="row align-items-center"></div>
+                    <div class="col">
+                      
+                      <select class="form-control" v-model="filter.column">
+                        <option value="">Select Column</option>
+                        <option v-for="column in columns" :value="column" :key="column">{{ column }}</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      
+                      <select class="form-control" v-model="filter.condition">
+                        <option value="">Select Condition</option>
+                        <option v-for="condition in conditions" :value="condition" :key="condition">{{ condition }}</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <div class="form-control">
+                        <input v-model="filter.value" placeholder="Value" />
+                      </div>
+                    </div>
+                
+                  <div class="col">
+                    <button class="btn btn-danger" @click="removeFilter(index)">Remove</button>
                   </div>
-                </div>
               </div>
-              <div class="row button-row">
-                  <div class="col-md-6 text-center">
+                  <button class="btn btn-primary" @click="addFilter">Add Filter</button>
+            
+                  <!-- <div class="row button-row justify-content-center">
+                  <div class="col-md-6 text-center" style="width: 17%;">
                     <button class="btn btn-success mt-2 filter-button" @click="fetchData">
-                      <span class="material-icons align-middle">filter_alt</span>
                       Filter
+                      <span class="material-icons align-middle">filter_alt</span>
+                      
                     </button>
                   </div>
                   
-                  <div class="col-md-6 text-right">
+                  <div class="col-md-6 text-right" style="width: 17%;">
                     <button class="btn btn-secondary mt-2 reset-button" @click="resetFilter">
-                      <span class="material-icons align-middle">backspace</span>
                       Reset
+                      <span class="material-icons align-middle">refresh</span>
+                      
                     </button>
                   </div>
-    </div>
-            </div>
+            </div> -->
           </div>
+        </div>
     </div>
       </div>
 
@@ -67,15 +76,15 @@
       </thead>
         
       <tbody>
-        <tr v-for="flight in filteredFlights" :key="flight.icao_code">
+        <tr v-for="flight in filteredFlights" :key="flight.id">
           <td>{{ flight.id }}</td>
           <td>{{ flight.icao_code }}</td>
           <td>{{ flight.manufacturer }}</td>
           <td>{{ flight.type_model }}</td>
           <td>{{ flight.Max_takeoff_weight }}</td>
           <td>
-            <router-link :to="{ name: 'details', params: { id: flight.id } }" class="button">
-              <span class="material-icons">visibility</span>
+            <router-link :to="{ name: 'details', params: { id: flight.id } }" class="button text-center">
+              <span style="color: var(--primary);" class="material-icons">visibility</span>
             </router-link>
           </td>
           
@@ -84,33 +93,36 @@
     
     </table>
     
-  <div class="pagination-container">
-    <div class="row align-items-center">
-      <div class="pagination-controls">
+  <div class="pagination-container ">
+    <div class="row md-12">
+      <div class="pagination-controls justify-content-center">
         <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
+          <ul class="pagination pagination-md ">
             <li class="page-item">
-              <button class="page-link" @click="goToPreviousPage" :disabled="!prevPageUrl" aria-label="Previous">
+              <button class="page-link " :class="{disabled:currentPage==1}" @click="goToPage(currentPage-1)" :disabled="!prevPageUrl" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </button>
             </li>
-            <li class="page-item"><span class="page-link">{{ currentPage }}</span></li>
+            <li v-if="currentPage > 1" @click="goToPage(currentPage-1)" class="page-item"><span class="btn page-link">{{ currentPage-1}}</span></li>
+            <li class="page-item"><span class="btn page-link active ">{{ currentPage }}</span></li>
+            <li v-if="currentPage < totalPages" class="page-item"><span class="btn page-link" @click="goToPage(currentPage+1)">{{ currentPage+1}}</span></li>
+            <li v-if="currentPage == 1" class="page-item" @click="goToPage(currentPage+2)"><span class="btn page-link">{{ currentPage+2}}</span></li>
             <li class="page-item">
-              <button class="page-link" @click="goToNextPage" :disabled="!nextPageUrl" aria-label="Next">
+              <button class="page-link" :class="{disabled:currentPage==totalPages}"  @click="goToPage(currentPage+1)" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </button>
             </li>
           </ul>
-          <p>{{ currentPage }} of {{ totalPages }} pages</p>
         </nav>
-        <div class="pagination-info">
-        <p>Total records: {{ totalCount }}</p>
       </div>
-      </div>
-      
-      
     </div>
   </div>
+    <div class="row pagination-info">
+        <span>{{ currentPage }} of {{ totalPages }} pages</span>
+        <span>Total records : {{ totalCount }}</span>
+    </div>
+      
+      
 
 
     <!-- <div class="pagination-container">
@@ -148,6 +160,7 @@ export default {
   },
   data() {
     return {
+      filters: [],
       loading: false,
       pageSize: 100, 
       currentPage: 1, 
@@ -169,16 +182,22 @@ export default {
     this.fetchData();
   },
   methods: {
-    goToNextPage() {
-      if (this.nextPageUrl) {
-        this.currentPage += 1;
-        this.fetchData();
-      }
+
+    addFilter() {
+      this.filters.push({
+        column: '',
+        condition: '',
+        value: '',
+      });
     },
-    goToPreviousPage() {
-      if (this.prevPageUrl) {
-        this.currentPage -= 1;
+    removeFilter(index) {
+      this.filters.splice(index, 1);
+    },
+    goToPage(page) {
+      if (this.nextPageUrl) {
+        this.currentPage = page;
         this.fetchData();
+        window.scrollTo(0,0);
       }
     },
 
@@ -215,6 +234,8 @@ export default {
           this.prevPageUrl = response.data.previous;
           console.log("nextPageUrl", this.nextPageUrl)
           console.log("prevPageUrl", this.prevPageUrl)
+          console.log("filteredFlights");
+          console.log(this.filteredFlights);
         }
         
         
@@ -241,33 +262,35 @@ export default {
 </script>
 
 <style>
-
-nav {
-    padding: 27px;
-    padding-left: 262px;
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px; 
 }
+
+
 
 table {
   font-family: 'Open Sans', sans-serif;
   width: 750px;
   border-collapse: collapse;
-  border: 3px solid #44475C;
+  border: 3px solid var(--dark);
   margin: 10px 10px 0 10px;
 }
 
 table th {
   text-transform: uppercase;
   text-align: left;
-  background: #44475C;
+  background: var(--dark);
   color: #FFF;
   padding: 8px;
   min-width: 30px;
 }
 
 table td {
-  text-align: left;
+  text-align: center;
   padding: 8px;
-  border-right: 2px solid #7D82A8;
+  border-right: 2px solid var(--dark-transparent);
 }
 table td:last-child {
   border-right: none;
@@ -275,6 +298,7 @@ table td:last-child {
 table tbody tr:nth-child(2n) td {
   background: #D4D8F9;
 }
+
 
 .pagination-container {
   display: flex;
@@ -308,7 +332,8 @@ table tbody tr:nth-child(2n) td {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px; /* Adjust as needed */
+  margin-bottom: 20px; 
+  margin-left: 346px;
 }
 
 .filter-button, .reset-button {

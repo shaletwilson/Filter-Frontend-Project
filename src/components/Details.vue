@@ -3,104 +3,107 @@
     <div class="container">
         <div class="row inline-row">
             <div v-if="flightDetail">
-                <div class="card border-dark mb-4 rounded mx-auto col-md-8" style="width: 50rem;" >
-                    <div class="card-header bg-transparent border-dark"><h3>Aircraft Specification</h3></div>
-                    <div class="row">
+                <div class="card border-dark mb-4 rounded mx-auto col-md-12" >
+                    <div class="card-header" style="background-color: var(--dark); color: var(--light);"> 
+                        <h3><strong>Aircraft Specification</strong></h3>
+                    </div>
+                    <div class="row" >
                         <div class="col-md-4 card-body text-dark">
-                            <h5 class="card-title">ICAO Code</h5>
-                            <p class="card-text">{{ flightDetail.icao_code }}</p>
+                            <h5 class="card-title"><strong>ICAO Code</strong></h5>
+                            <h6 class="card-text">{{ flightDetail.icao_code }}</h6>
                         </div>
                         <div class="col-md-4 card-body text-dark">
-                            <h5 class="card-title">Manufacturer</h5>
-                            <p class="card-text">{{ flightDetail.manufacturer }}</p>
+                            <h5 class="card-title"><strong>Manufacturer</strong></h5>
+                            <h6 class="card-text">{{ flightDetail.manufacturer }}</h6>
                         </div>
                         <div class="col-md-4 card-body text-dark">
-                            <h5 class="card-title">Model/Type</h5>
-                            <p class="card-text">{{ flightDetail.type_model }}</p>
+                            <h5 class="card-title"><strong>Model/Type</strong></h5>
+                            <h6 class="card-text">{{ flightDetail.type_model }}</h6>
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="card col-md-4" >
+                        <h5 class="card-title" style="background-color: var(--primary);"><strong>Performance</strong></h5>
+                        <div class="card-body text-start" style="background-color: var(--primary-transparent);">
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Wake Category : </strong>{{ flightDetail.wake }}</h6></div>
+                                <div class="col-md-12"><h6> <strong>Crew Minimum : </strong>{{ flightDetail.crew_min }}</h6></div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6> <strong>Minimum PAX : </strong>{{ flightDetail.PAX_min }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Maximum PAX : </strong>{{ flightDetail.PAX_max }}</h6></div>
+                                
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Speed : </strong>{{ flightDetail.speed }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Range : </strong>{{ flightDetail.range }}</h6></div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Engine Power : </strong>{{ flightDetail.engine_power }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Engine Model : </strong>{{ flightDetail.engine_model }}</h6></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Propulsion : </strong>{{ flightDetail.propulsion }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Service Ceiling : </strong>{{ flightDetail.service_ceiling }}</h6></div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-md-4">
+                            <h5 class="card-title" style="background-color: var(--primary);"><strong>Weights and Dimensions</strong></h5>
+                        <div class="card-body text-start" style="background-color: var(--primary-transparent);">
+
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Empty Weight : </strong>{{ flightDetail.empty_weight }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Max Takeoff Weight : </strong>{{ flightDetail.Max_takeoff_weight }}</h6></div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Wing Span : </strong>{{ flightDetail.wing_span }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Wing Area : </strong>{{ flightDetail.wing_area }}</h6></div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Length : </strong>{{ flightDetail.length }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Height : </strong>{{ flightDetail.height }}</h6></div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="card col-md-4">
+                            <h5 class="card-title" style="background-color: var(--primary);"><strong>History and Production</strong></h5>
+                        <div class="card-body text-start" style="background-color: var(--primary-transparent);">
+
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>First Flight : </strong>{{ flightDetail.first_flight }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Production Status : </strong>{{ flightDetail.production_status }}</h6></div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Total Production : </strong>{{ flightDetail.total_production }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Data for Version : </strong>{{ flightDetail.data_for_version }}</h6></div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Variants : </strong>{{ flightDetail.variants }}</h6></div>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="card col-md-4" >
-                        <div class="card-body">
-                            <h3 class="card-title">Performance</h3>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Wake Category</h6>{{ flightDetail.wake }}</div>
-                                <div class="col-md-6"><h6>Crew Minimum</h6>{{ flightDetail.crew_min }}</div>
-                                
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Minimum PAX</h6>{{ flightDetail.PAX_min }}</div>
-                                <div class="col-md-6"><h6>Maximum PAX</h6>{{ flightDetail.PAX_max }}</div>
-                                
-                                
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Speed</h6>{{ flightDetail.speed }}</div>
-                                <div class="col-md-6"><h6>Range</h6>{{ flightDetail.range }}</div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Engine Power</h6>{{ flightDetail.engine_power }}</div>
-                                <div class="col-md-6"><h6>Engine Model</h6>{{ flightDetail.engine_model }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Propulsion</h6>{{ flightDetail.propulsion }}</div>
-                                <div class="col-md-6"><h6>Service Ceiling</h6>{{ flightDetail.service_ceiling }}</div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card col-md-4">
-                        <div class="card-body">
-                            <h3 class="card-title">Weights and Dimensions</h3>
-
-                            <div class="row">
-                                <div class="col-md-6"><h6>Empty Weight</h6>{{ flightDetail.empty_weight }}</div>
-                                <div class="col-md-6"><h6>Max Takeoff Weight</h6>{{ flightDetail.Max_takeoff_weight }}</div>
-                                
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Wing Span</h6>{{ flightDetail.wing_span }}</div>
-                                <div class="col-md-6"><h6>Wing Area</h6>{{ flightDetail.wing_area }}</div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Length</h6>{{ flightDetail.length }}</div>
-                                <div class="col-md-6"><h6>Height</h6>{{ flightDetail.height }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card col-md-4">
-                        <div class="card-body">
-                            <h3 class="card-title">History and Production</h3>
-
-                            <div class="row">
-                                <div class="col-md-6"><h6>First Flight</h6>{{ flightDetail.first_flight }}</div>
-                                <div class="col-md-6"><h6>Production Status</h6>{{ flightDetail.production_status }}</div>
-                                
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Total Production</h6> {{ flightDetail.total_production }}</div>
-                                <div class="col-md-6"><h6>Data for Version</h6> {{ flightDetail.data_for_version }}</div>
-                                
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6"><h6>Variants</h6> {{ flightDetail.variants }}</div>
-                                
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         
         </div>
         
     </div>
-    <div class="row col-md-3 mx-auto">
-    <button class="btn btn-dark mt-2"><router-link to="/dashboard" class="button">
-        Back to Dashboard 
-    </router-link></button>
+    <div class="row col-md-2 mx-auto">
+    <router-link  to="/dashboard" class="button btn" style="background-color: var(--dark); color: white;">
+        <strong>Back to Dashboard </strong>
+        <span class="material-icons  align-middle">reply</span>
+    </router-link> 
     </div>
     
    

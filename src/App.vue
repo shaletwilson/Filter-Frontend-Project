@@ -35,10 +35,12 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   color: #2c3e50;
 }
 :root {
-	--primary: #4ade80;
+	--primary: #06AEE2;
+  --primary-transparent: #06afe229; 
 	--primary-alt: #22c55e;
 	--grey: #64748b;
-	--dark: #1e293b;
+	--dark: #0B1F3E;
+  --dark-transparent: #0b1f3e3b;
 	--dark-alt: #334155;
 	--light: #f1f5f9;
 	--sidebar-width: 300px;

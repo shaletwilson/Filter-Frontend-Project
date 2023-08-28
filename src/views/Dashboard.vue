@@ -1,21 +1,21 @@
 <template>
   
-  <!-- <Dashboard /> -->
-  <TestFilter />
+  <Dashboard />
+  <!-- <TestFilter /> -->
 
 
 </template>
 
 <script>
 // @ is an alias to /src
-// import Dashboard from '@/components/Dashboard.vue'
-import TestFilter from '@/components/TestFilter.vue';
+import Dashboard from '@/components/Dashboard.vue'
+// import TestFilter from '@/components/TestFilter.vue';
 
 export default {
 name: 'DashboardView',
 components: {
-  // Dashboard
-  TestFilter
+  Dashboard
+  // TestFilter
 }
 }
 </script>
