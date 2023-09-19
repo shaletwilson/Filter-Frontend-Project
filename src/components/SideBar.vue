@@ -20,6 +20,14 @@
 				<span class="material-icons">table_chart</span>
 				<span class="text">Dashboard</span>
 			</router-link>
+			<router-link to="/airport" class="button">
+				<span class="material-icons">connecting_airports</span>
+				<span class="text">Airport Info</span>
+			</router-link>
+			<router-link to="/testmap" class="button">
+				<span class="material-icons">connecting_airports</span>
+				<span class="text">Test Map</span>
+			</router-link>
 			<router-link to="/team" class="button">
 				<span class="material-icons">group</span>
 				<span class="text">Team</span>

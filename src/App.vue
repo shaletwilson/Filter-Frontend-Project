@@ -14,6 +14,7 @@ export default {
     localStorage.setItem("is_expanded", false)
   }
 }
+
 </script>
 
 <style lang="scss">

@@ -9,34 +9,55 @@
             </div>
             <div class="card-body">
               <div class="row align-items-center">
-                <div v-for="(filter, index) in filters" :key="index" class="row align-items-center"></div>
-                    <div class="col">
-                      
-                      <select class="form-control" v-model="filter.column">
-                        <option value="">Select Column</option>
-                        <option v-for="column in columns" :value="column" :key="column">{{ column }}</option>
-                      </select>
-                    </div>
-                    <div class="col">
-                      
-                      <select class="form-control" v-model="filter.condition">
-                        <option value="">Select Condition</option>
-                        <option v-for="condition in conditions" :value="condition" :key="condition">{{ condition }}</option>
-                      </select>
-                    </div>
+                <div class="col">
+                  
+                  <select class="form-control" v-model="selectedColumn">
+                    <option value="">Select Column</option>
+                    <option v-for="column in columns" :value="column" :key="column">{{ column }}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  
+                  <select class="form-control" v-model="selectedCondition">
+                    <option value="">Select Condition</option>
+                    <option v-for="condition in conditions" :value="condition" :key="condition">{{ condition }}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <div class="form-control">
+                    <input v-model="filterValue" placeholder="Value" />
+                  </div>
+                </div>
+                <div v-for="(filter, index) in filters" :key="index" class="row align-items-center">
+  <!-- Column select -->
+                <div class="col">
+                  <select class="form-control" v-model="filter.column">
+                    <option value="">Select Column</option>
+                    <option v-for="column in columns" :value="column" :key="column">{{ column }}</option>
+                  </select>
+                </div>
+  <!-- Condition select -->
+                  <div class="col">
+                    <select class="form-control" v-model="filter.condition">
+                      <option value="">Select Condition</option>
+                      <option v-for="condition in conditions" :value="condition" :key="condition">{{ condition }}</option>
+                    </select>
+                  </div>
+  <!-- Value input -->
                     <div class="col">
                       <div class="form-control">
                         <input v-model="filter.value" placeholder="Value" />
                       </div>
                     </div>
-                
-                  <div class="col">
-                    <button class="btn btn-danger" @click="removeFilter(index)">Remove</button>
-                  </div>
+  <!-- Add filter button -->
+                    <div class="col">
+                      <button class="btn btn-danger" @click="removeFilter(index)">Remove</button>
+                    </div>
+      </div>
+      <div class="col"><button class="btn btn-primary" @click="addFilter">Advance Filter</button>
+</div>
               </div>
-                  <button class="btn btn-primary" @click="addFilter">Add Filter</button>
-            
-                  <!-- <div class="row button-row justify-content-center">
+              <div class="row button-row justify-content-center">
                   <div class="col-md-6 text-center" style="width: 17%;">
                     <button class="btn btn-success mt-2 filter-button" @click="fetchData">
                       Filter
@@ -52,11 +73,12 @@
                       
                     </button>
                   </div>
-            </div> -->
+            </div>
           </div>
         </div>
     </div>
       </div>
+  
 
       <div v-if="loading" class="spinner-border" role="status">
         <span class="sr-only"></span>
@@ -182,8 +204,8 @@ export default {
     this.fetchData();
   },
   methods: {
-
     addFilter() {
+      console.log("in add filter")
       this.filters.push({
         column: '',
         condition: '',
@@ -195,14 +217,15 @@ export default {
     },
     goToPage(page) {
       if (this.nextPageUrl) {
+        window.scrollTo(0,0);
         this.currentPage = page;
         this.fetchData();
-        window.scrollTo(0,0);
       }
     },
 
     async fetchData() {
       this.loading = true;
+      this.message = "";
       try {
         const queryParams = new URLSearchParams({
           column: this.selectedColumn,
@@ -210,8 +233,8 @@ export default {
           value: this.filterValue,
           page: this.currentPage,
         });
-
-        const response = await axios.get(`/filter-api/?${queryParams.toString()}`);
+        
+        const response = await axios.get(`/single-filter-api/?${queryParams.toString()}`);
         
 
         // const response = await axios.post('filter-api/', {
@@ -219,8 +242,8 @@ export default {
         //   condition: this.selectedCondition,
         //   value: this.filterValue,
         // });
-        console.log("dataccccccccccccccccccccccc")
-        console.log(response.data.results)
+        // console.log("dataccccccccccccccccccccccc")
+        // console.log(response.data.results)
         if(response.data.response == 'NO Data') {
             this.message = response.data.message;
           }
@@ -240,12 +263,50 @@ export default {
         
         
 
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error('Error fetching data:', error);
       }
       finally {
         this.loading = false;
       }
+      // try {
+      //   console.log("in try")
+
+      //   const filterData = this.filters.map(filter => ({
+      //     column: filter.column,
+      //     condition: filter.condition,
+      //     value: filter.value,
+      //   }));
+      //   console.log("data", filterData)
+      //   const queryParams = new URLSearchParams({
+      //     filters: JSON.stringify(filterData),
+      //     page: this.currentPage,
+      //   });
+  
+      //   const response = await axios.get(`/filter-api/?${queryParams.toString()}`);
+      //   console.log("response", response)
+      //   if(response.data.response == 'NO Data') {
+      //       this.message = response.data.message;
+      //     }
+      //   else {
+      //     this.filteredFlights = response.data.results;
+      //     this.message = response.data.message;
+      //     this.totalPages = Math.ceil(response.data.count / this.pageSize);
+      //     this.totalCount = response.data.count;
+      //     console.log("count", this.totalCount)
+      //     this.nextPageUrl = response.data.next;
+      //     this.prevPageUrl = response.data.previous;
+      //     console.log("nextPageUrl", this.nextPageUrl)
+      //     console.log("prevPageUrl", this.prevPageUrl)
+      //     console.log("filteredFlights");
+      //     console.log(this.filteredFlights);
+      //   }
+  
+      // } catch (error) {
+      //   console.error('Error fetching data:', error);
+      // }
     },
     resetFilter() {
       this.selectedColumn = '';
@@ -280,7 +341,7 @@ table {
 
 table th {
   text-transform: uppercase;
-  text-align: left;
+  text-align: center;
   background: var(--dark);
   color: #FFF;
   padding: 8px;

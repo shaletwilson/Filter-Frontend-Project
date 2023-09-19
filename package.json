@@ -7,6 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.2",
+    "@googlemaps/markerclusterer": "^2.4.1",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
     "ag-grid": "^18.1.2",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.1",

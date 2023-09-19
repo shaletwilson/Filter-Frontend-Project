@@ -2,9 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 // import HomeView from '../views/HomeView.vue'
 import SignUp from '../views/SignUpView.vue'
 import Dashboard from '../views/Dashboard.vue'
+import AirportMap from '../views/AirportMap'
 import HomeView from '../views/HomeView.vue'
 import LogInView from '../views/LogInView.vue'
 import Details from '../views/DetailsView.vue'
+import opsm from '../views/OPSM.vue'
 
 const routes = [
   {
@@ -27,6 +29,16 @@ const routes = [
     name: 'dashboard',
     component: Dashboard
   }, 
+  {
+    path: '/airport',
+    name: 'AirportMap',
+    component: AirportMap
+  }, 
+  {
+    path: '/testmap',
+    name: 'opsm',
+    component: opsm
+  },
   {
     // path: '/details',
     path: '/details:id',
