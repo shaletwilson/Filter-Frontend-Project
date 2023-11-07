@@ -6,6 +6,7 @@ import AirportMap from '../views/AirportMap'
 import HomeView from '../views/HomeView.vue'
 import LogInView from '../views/LogInView.vue'
 import Details from '../views/DetailsView.vue'
+import AirportDetails from '../views/AirportDetailsView.vue'
 import opsm from '../views/OPSM.vue'
 
 const routes = [
@@ -44,6 +45,11 @@ const routes = [
     path: '/details:id',
     name: 'details',
     component: Details
+  },
+  {
+    path: '/airport-details:id',
+    name: 'airport-details',
+    component: AirportDetails
   },
   {
     path: '/logout',

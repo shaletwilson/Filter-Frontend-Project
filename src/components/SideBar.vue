@@ -28,10 +28,14 @@
 				<span class="material-icons">connecting_airports</span>
 				<span class="text">Test Map</span>
 			</router-link>
-			<router-link to="/team" class="button">
+			<!-- <router-link to="/team" class="button">
 				<span class="material-icons">group</span>
 				<span class="text">Team</span>
-			</router-link>
+			</router-link> -->
+			<!-- <router-link to="/airport-details" class="button">
+				<span class="material-icons">info</span>
+				<span class="text">Airport Info</span>
+			</router-link> -->
 			<router-link to="/contact" class="button">
 				<span class="material-icons">email</span>
 				<span class="text">Contact</span>
