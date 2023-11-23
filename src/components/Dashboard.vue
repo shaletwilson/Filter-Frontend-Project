@@ -9,25 +9,25 @@
             </div>
             <div class="card-body">
               <div class="row align-items-center">
-                <div class="col">
+                <!-- <div class="col">
                   
                   <select class="form-control" v-model="selectedColumn">
                     <option value="">Select Column</option>
                     <option v-for="column in columns" :value="column" :key="column">{{ column }}</option>
                   </select>
-                </div>
-                <div class="col">
+                </div> -->
+                <!-- <div class="col">
                   
                   <select class="form-control" v-model="selectedCondition">
                     <option value="">Select Condition</option>
                     <option v-for="condition in conditions" :value="condition" :key="condition">{{ condition }}</option>
                   </select>
-                </div>
-                <div class="col">
+                </div> -->
+                <!-- <div class="col">
                   <div class="form-control">
                     <input v-model="filterValue" placeholder="Value" />
                   </div>
-                </div>
+                </div> -->
                 <div v-for="(filter, index) in filters" :key="index" class="row align-items-center">
   <!-- Column select -->
                 <div class="col">
@@ -54,7 +54,10 @@
                       <button class="btn btn-danger" @click="removeFilter(index)">Remove</button>
                     </div>
       </div>
-      <div class="col"><button class="btn btn-primary" @click="addFilter">Advance Filter</button>
+      <div class="col"><button class="btn btn-primary" @click="addFilter">
+        <span class="material-icons align-middle">add</span>
+        Add more filters
+      </button>
 </div>
               </div>
               <div class="row button-row justify-content-center">
@@ -182,7 +185,7 @@ export default {
   },
   data() {
     return {
-      filters: [],
+      filters: [{column: '', condition: '',value: ''}],
       loading: false,
       pageSize: 100, 
       currentPage: 1, 

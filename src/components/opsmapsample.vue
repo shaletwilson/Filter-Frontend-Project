@@ -2,7 +2,61 @@
 
   <template>
     <SideBar />
+    <div class="row">
+        <div class="col-md-12">
+          <div class="card mx-auto col-md-8">
+            <div class="card-header">
+              <h5 class="mb-0">Filter</h5>
+            </div>
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col">
+                  
+                  <select class="form-control" v-model="selectedColumn">
+                    <option value="" disabled selected>Select Column</option>
+                    <option v-for="column in columns" :value="column" :key="column">{{ column }}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  
+                  <select class="form-control" v-model="selectedCondition">
+                    <option value="">Select Condition</option>
+                    <option v-for="condition in conditions" :value="condition" :key="condition" >{{ condition }}</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <div class="form-control">
+                    <input v-model="filterValue" placeholder="Enter the Value" />
+                  </div>
+                </div>
+            </div>
+            </div>
+              <div class="row button-row justify-content-center">
+                  <div class="col-md-6 text-center" style="width: 17%;">
+                    <button class="btn btn-success mt-2 filter-button" @click="fetchAirports">
+                      Filter
+                      <span class="material-icons align-middle">filter_alt</span>
+                      
+                    </button>
+                  </div>
+                  
+                  <div class="col-md-6 text-right" style="width: 17%;">
+                    <button class="btn btn-secondary mt-2 reset-button"  @click="resetFilter">
+                      Reset
+                      <span class="material-icons align-middle">refresh</span>
+                      
+                    </button>
+                  </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+      <p v-if="message" class="h4 text-danger">{{ this.message }}</p>
 
+      <div v-if="loading" class="spinner-border" role="status">
+        <span class="sr-only"></span>
+      </div>
     <div id="map">
       <l-map :key="mapKey" :zoom="8" :center="mapCenter">
         <l-tile-layer :url="osmUrl" :attribution="osmAttribution"></l-tile-layer>
@@ -10,29 +64,21 @@
         <l-icon :iconUrl="customIconUrl" :iconSize="[32, 32]" iconAnchor="[16, 32]" :popupAnchor="[0, -32]" :className="customIconClass" :id="customIconId"></l-icon>
         
        <div  v-for="(airport, index) in airports">
-        <l-marker :lat-lng="{ lat: airport.latitude_deg, lng: airport.longitude_deg }" :icon="createCustomIcon()">
+        <l-marker :lat-lng="{ lat: airport.geometry_coordinates[0], lng: airport.geometry_coordinates[1] }" :icon="createCustomIcon()">
           <l-popup>
+            <strong>ID:</strong> {{ airport.id }}<br>
           <strong>Name:</strong> {{ airport.name }}<br>
-          <strong>Latitude:</strong>{{ airport.latitude_deg }}<br>
-          <strong>Longitude:</strong>{{ airport.longitude_deg }}<br>
-          <strong>IATA Code:</strong>{{ airport.iata_code }}<br>
-          <strong>GPS Code:</strong>{{ airport.gps_code }}<br>
-          <strong>Country:</strong>{{ airport.country_name }}<br>
-          <strong>airport link:</strong><a :href="airport.wikipedia_link" target="_blank">Visit Airport Website</a><br>
+          <strong>Latitude:</strong>{{ airport.geometry_coordinates[0] }}<br>
+          <strong>Longitude:</strong>{{ airport.geometry_coordinates[1] }}<br>
+          <strong>ICAO Code:</strong>{{ airport.icaoCode }}<br>
+          <strong>Country:</strong>{{ airport.country }}<br>
+          <!-- <strong>airport link:</strong><a :href="airport.wikipedia_link" target="_blank">Visit Airport Website</a><br> -->
           <strong>More Info:</strong><router-link :to="{ name: 'airport-details', params: { id: airport.id } }"><i class="material-icons">visibility</i></router-link>
         </l-popup>
         </l-marker>
 
-      </div>
+        </div>
     
-      <!-- <l-marker
-        v-for="(airport, index) in airportArray"
-        :key="index"
-        :lat-lng="{ lat: airport[0], lng: airport[1] }"
-      >
-      {{ console.log("data in template: ", airport[0], airport[1]) }}
-      
-      </l-marker> -->
       </l-map>
     </div>
   </template>
@@ -42,7 +88,7 @@
   import SideBar from '@/components/SideBar.vue'
   import "leaflet/dist/leaflet.css";
   import { LMap, LTileLayer, LMarker, LPolyline, LPopup  } from "@vue-leaflet/vue-leaflet";
-  import iconurl from '../assets/Airport-icon.png'
+  import iconurl from '../assets/Airport-icon-bg.png'
 
   
   export default {
@@ -57,6 +103,10 @@
     },
     data() {
         return {
+          columns: ['name', 'icaoCode', 'MTOW'],
+          conditions: ['<', '>', '<=', '>=', '=', 'contains', 'startswith'],
+          loading: false,
+          message: '',
 
           osmUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
           osmAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -88,22 +138,51 @@
   },
 
   methods: {
+    resetFilter() {
+      this.selectedColumn = '';
+      this.selectedCondition = '';
+      this.filterValue = '';
+      this.airports = ''
+    },
     createCustomIcon() {
       return L.icon(this.customIconOptions);
     },
   async fetchAirports() {
-    try{
-        const url = 'airport-list-api/';
-        const response = await axios.get(url)
-        this.airports = response.data.results;
-        this.airports.forEach((airport)=>this.airportArray.push([airport.latitude_deg,airport.longitude_deg]))
-        console.log("osm data", this.airportArray)
-        return this.airportArray
+    this.loading = true;
+    this.message = "";
+    try {
+      let apiUrl = "airport-filter-api/";
+      if (this.selectedColumn && this.selectedCondition && this.filterValue) {
+            const queryParams = new URLSearchParams({
+                column: this.selectedColumn,
+                condition: this.selectedCondition,
+                value: this.filterValue,
+            });
 
+            apiUrl += `?${queryParams.toString()}`;
+        }
+
+          const response = await axios.get(apiUrl);
+      
+        console.log('data from api', response.data)
+        if(response.data.response == 'NO Data') {
+            this.message = response.data.message;
+          }
+          else {
+            this.airports = response.data.results;
+            this.airports.forEach((airport)=>airport.geometry_coordinates=airport.geometry_coordinates.slice(2,-2).split(',').reverse())
+          }
+
+            // try{
+    //     const url = 'airport-filter-api/';
+    //     const response = await axios.get(url)
+    //     this.airports = response.data.results;
+    //     this.airports.forEach((airport)=>airport.geometry_coordinates=airport.geometry_coordinates.slice(2,-2).split(',').reverse())
       }catch (error) {
         console.error('Error fetching data:', error);
       }
-    
+      
+      this.loading = false;
 
     
   },
@@ -114,6 +193,8 @@
   
   <style>
 #map {
+  z-index: -99;
+  position: absolute;
   height: 600px;
   width: 98%;
   /* padding-left: 100px; */

@@ -20,13 +20,13 @@
 				<span class="material-icons">table_chart</span>
 				<span class="text">Dashboard</span>
 			</router-link>
-			<router-link to="/airport" class="button">
+			<!-- <router-link to="/airport" class="button">
 				<span class="material-icons">connecting_airports</span>
 				<span class="text">Airport Info</span>
-			</router-link>
-			<router-link to="/testmap" class="button">
+			</router-link> -->
+			<router-link to="/airports" class="button">
 				<span class="material-icons">connecting_airports</span>
-				<span class="text">Test Map</span>
+				<span class="text">Airports</span>
 			</router-link>
 			<!-- <router-link to="/team" class="button">
 				<span class="material-icons">group</span>
@@ -36,6 +36,10 @@
 				<span class="material-icons">info</span>
 				<span class="text">Airport Info</span>
 			</router-link> -->
+			<router-link to="/file-upload" class="button">
+				<span class="material-icons">upload</span>
+				<span class="text">Upload Data</span>
+			</router-link>
 			<router-link to="/contact" class="button">
 				<span class="material-icons">email</span>
 				<span class="text">Contact</span>

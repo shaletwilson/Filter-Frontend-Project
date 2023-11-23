@@ -8,6 +8,7 @@ import LogInView from '../views/LogInView.vue'
 import Details from '../views/DetailsView.vue'
 import AirportDetails from '../views/AirportDetailsView.vue'
 import opsm from '../views/OPSM.vue'
+import UploadView from '../views/UploadView.vue'
 
 const routes = [
   {
@@ -36,9 +37,14 @@ const routes = [
     component: AirportMap
   }, 
   {
-    path: '/testmap',
+    path: '/airports',
     name: 'opsm',
     component: opsm
+  },
+  {
+    path: '/file-upload',
+    name: 'UploadView',
+    component: UploadView
   },
   {
     // path: '/details',
