@@ -85,72 +85,84 @@
                 <br>
                 <br>
                     <h5 class="card-title" style="background-color: var(--primary);"><strong>Runway Info</strong></h5>
-                    <div class="row">
+                    <div class="accordion" id="accordionExample">
+                                
                         <div v-for="(item, index) in runway_set" :key="index">
-                            <div class="row">
-                        
-                            <div class="card col-md-4" >
-                                <div class="card-body text-start" style="background-color: var(--primary-transparent);">
-                                    <div class="row">
-                                        <h4><strong>General Info</strong></h4>
-                                        <div class="col-md-12"><h6><strong>designator : </strong>{{ item.designator }}</h6></div>
-                                        <div class="col-md-12"><h6> <strong>trueHeading : </strong>{{ item.trueHeading }}</h6></div>
-                                                                
-                                        <div class="col-md-12"><h6><strong>operations : </strong>{{ item.operations  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>mainRunway : </strong>{{ item.mainRunway  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>alignedTrueNorth : </strong>{{ item.alignedTrueNorth  }}</h6></div>
-
-                                    </div>
-                                    
-                                    
-                                </div>
-                                
-                                
-                            </div>
                             
-                            <div class="card col-md-4" >
-                                <div class="card-body text-start" style="background-color: var(--primary-transparent);">
-                                    <div class="row">
-                                        <h4><strong>Surface Info</strong></h4>
-                                        <div class="col-md-12"><h6><strong>surface_composition : </strong>{{ item.surface_composition }}</h6></div>
-                                        <div class="col-md-12"><h6> <strong>surface_mainComposite : </strong>{{ item.surface_mainComposite }}</h6></div>
-                                                                
-                                        <div class="col-md-12"><h6><strong>operations : </strong>{{ item.operations  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>mainRunway : </strong>{{ item.mainRunway  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>surface_condition : </strong>{{ item.surface_condition  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>MTOW(In Ton) : </strong>{{ item.surface_mtow_value  }}</h6></div>
+                            <div class="accordion-item p-3">
+                                <h2 class="accordion-header" :id="'heading' + index+1">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index+1" aria-expanded="true" :aria-controls="'#collapse' + index+1">
+                                        Runway {{ index+1 }}
+                                    </button>  
+                                </h2>
+                                <div :id="'collapse' + index+1" class="accordion-collapse collapse" :aria-labelledby="'heading' + index+1" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            
+                                            <div class=" col-md-4" >
+                                                <div class="card-body text-start" style="background-color: var(--primary-transparent);">
+                                                    <div class="row">
+                                                        <h4><strong>General Info</strong></h4>
+                                                        <div class="col-md-12"><h6><strong>designator : </strong>{{ item.designator }}</h6></div>
+                                                        <div class="col-md-12"><h6> <strong>trueHeading : </strong>{{ item.trueHeading }}</h6></div>
+                                                                                
+                                                        <div class="col-md-12"><h6><strong>operations : </strong>{{ item.operations  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>mainRunway : </strong>{{ item.mainRunway  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>alignedTrueNorth : </strong>{{ item.alignedTrueNorth  }}</h6></div>
 
-                                    </div>
-                                    
-                                    
-                                </div>
-                                
-                                
-                            </div>
-                            <div class="card col-md-4" >
-                                <div class="card-body text-start" style="background-color: var(--primary-transparent);">
-                                    <div class="row">
-                                        <h4><strong>Declared Distance</strong></h4>
-                                        <div class="col-md-12"><h6><strong>Length(m) : </strong>{{ item.dimension_length_value }}</h6></div>
-                                        <div class="col-md-12"><h6> <strong>Width(m) : </strong>{{ item.dimension_width_value }}</h6></div>
-                                                                
-                                        <div class="col-md-12"><h6><strong>TORA : </strong>{{ item.declaredDistance_tora_value  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>LDA : </strong>{{ item.declaredDistance_lda_value  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>surface_condition : </strong>{{ item.surface_condition  }}</h6></div>
-                                        <div class="col-md-12"><h6><strong>Source : </strong>Open AIP</h6></div>
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                            
+                                            <div class=" col-md-4" >
+                                                <div class="card-body text-start" style="background-color: var(--primary-transparent);">
+                                                    <div class="row">
+                                                        <h4><strong>Surface Info</strong></h4>
+                                                        <div class="col-md-12"><h6><strong>surface_composition : </strong>{{ item.surface_composition }}</h6></div>
+                                                        <div class="col-md-12"><h6> <strong>surface_mainComposite : </strong>{{ item.surface_mainComposite }}</h6></div>
+                                                                                
+                                                        <div class="col-md-12"><h6><strong>operations : </strong>{{ item.operations  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>mainRunway : </strong>{{ item.mainRunway  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>surface_condition : </strong>{{ item.surface_condition  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>MTOW(In Ton) : </strong>{{ item.surface_mtow_value  }}</h6></div>
 
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                            <div class=" col-md-4" >
+                                                <div class="card-body text-start" style="background-color: var(--primary-transparent);">
+                                                    <div class="row">
+                                                        <h4><strong>Declared Distance</strong></h4>
+                                                        <div class="col-md-12"><h6><strong>Length(m) : </strong>{{ item.dimension_length_value }}</h6></div>
+                                                        <div class="col-md-12"><h6> <strong>Width(m) : </strong>{{ item.dimension_width_value }}</h6></div>
+                                                                                
+                                                        <div class="col-md-12"><h6><strong>TORA : </strong>{{ item.declaredDistance_tora_value  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>LDA : </strong>{{ item.declaredDistance_lda_value  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>surface_condition : </strong>{{ item.surface_condition  }}</h6></div>
+                                                        <div class="col-md-12"><h6><strong>Source : </strong>Open AIP</h6></div>
+
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                        </div>
                                     </div>
-                                    
-                                    
                                 </div>
-                                
-                                
                             </div>
                         </div>
-                        </div>
-                        
+                    </div>   
 
-                </div>
                 </div>
             </div>
         

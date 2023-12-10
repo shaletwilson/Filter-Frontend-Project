@@ -4,6 +4,7 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.js"
 import 'vue3-easy-data-table/dist/style.css';
 // import 'bootstrap-vue/dist/bootstrap-vue.css';
 import Vue3EasyDataTable from 'vue3-easy-data-table';

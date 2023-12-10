@@ -72,6 +72,7 @@ const ToggleMenu = () => {
 
 <style lang="scss" scoped>
 aside {
+	z-index: 999;
 
     position: fixed;
 
@@ -217,7 +218,7 @@ aside {
 
 	@media (max-width: 1024px) {
 		position: absolute;
-		z-index: 99;
+		z-index: 999;
 	}
 }
 </style>
