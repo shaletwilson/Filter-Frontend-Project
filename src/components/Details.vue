@@ -37,17 +37,18 @@
                                 
                             </div>
                             <div class="row">
-                                <div class="col-md-12"><h6><strong>Speed : </strong>{{ flightDetail.speed }}</h6></div>
-                                <div class="col-md-12"><h6><strong>Range : </strong>{{ flightDetail.range }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Cruise Speed(km/h) : </strong>{{ flightDetail.speed }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Max Speed(km/h) : </strong>{{ flightDetail.max_speed }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Range(km) : </strong>{{ flightDetail.range }}</h6></div>
 
                             </div>
                             <div class="row">
-                                <div class="col-md-12"><h6><strong>Engine Power : </strong>{{ flightDetail.engine_power }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Engine Power(kW) : </strong>{{ flightDetail.engine_power }}</h6></div>
                                 <div class="col-md-12"><h6><strong>Engine Model : </strong>{{ flightDetail.engine_model }}</h6></div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12"><h6><strong>Propulsion : </strong>{{ flightDetail.propulsion }}</h6></div>
-                                <div class="col-md-12"><h6><strong>Service Ceiling : </strong>{{ flightDetail.service_ceiling }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Service Ceiling(m) : </strong>{{ flightDetail.service_ceiling }}</h6></div>
                                 
                             </div>
                         </div>
@@ -57,18 +58,22 @@
                         <div class="card-body text-start" style="background-color: var(--primary-transparent);">
 
                             <div class="row">
-                                <div class="col-md-12"><h6><strong>Empty Weight : </strong>{{ flightDetail.empty_weight }}</h6></div>
-                                <div class="col-md-12"><h6><strong>Max Takeoff Weight : </strong>{{ flightDetail.Max_takeoff_weight }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Empty Weight(kg) : </strong>{{ flightDetail.empty_weight }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Max Takeoff Weight(kg) : </strong>{{ flightDetail.Max_takeoff_weight }}</h6></div>
                                 
                             </div>
                             <div class="row">
-                                <div class="col-md-12"><h6><strong>Wing Span : </strong>{{ flightDetail.wing_span }}</h6></div>
-                                <div class="col-md-12"><h6><strong>Wing Area : </strong>{{ flightDetail.wing_area }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Wing Span(m) : </strong>{{ flightDetail.wing_span }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Wing Area(m) : </strong>{{ flightDetail.wing_area }}</h6></div>
 
                             </div>
                             <div class="row">
-                                <div class="col-md-12"><h6><strong>Length : </strong>{{ flightDetail.length }}</h6></div>
-                                <div class="col-md-12"><h6><strong>Height : </strong>{{ flightDetail.height }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Length(m) : </strong>{{ flightDetail.length }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Height(m) : </strong>{{ flightDetail.height }}</h6></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12"><h6><strong>Payload(km) : </strong>{{ flightDetail.payload }}</h6></div>
+                                <div class="col-md-12"><h6><strong>Noise(dB) : </strong>{{ flightDetail.noise }}</h6></div>     
                             </div>
                         </div>
                     </div>  
@@ -86,9 +91,10 @@
                                 <div class="col-md-12"><h6><strong>Data for Version : </strong>{{ flightDetail.data_for_version }}</h6></div>
                                 
                             </div>
+                            
                             <div class="row">
                                 <div class="col-md-12"><h6><strong>Variants : </strong>{{ flightDetail.variants }}</h6></div>
-                                
+                                <div class="col-md-12"><h6><strong>Project Started Year : </strong>{{ flightDetail.project_started_year }}</h6></div>
                             </div>
                         </div>
                     </div>

@@ -5,7 +5,8 @@
       <div>
         <h3>Instructions</h3>
         <h5><i>
-          * For uploading flight data, please select flight data and upload excel file.<br>
+          * For uploading Aircraft data, 
+          <a :href="sampleFileLink" download="flight_data_sample.xlsx">For sample format click here</a><br>
           * For uploading Airport Data, please select the source either from AIP or Other source. <br>
           * For AIP use JSON file. for other source choose excel file or CSV <br>
         </i></h5>
@@ -87,12 +88,12 @@ export default {
       selectuploadtype: "",
       selectedFile: null,
       sources: ["From AIP", "Other Source"], 
-      uploadtypes: ["Airport Data", "Flight Data"],
+      uploadtypes: ["Airport Data", "Aircraft Data"],
     };
   },
   methods: {
     uploadTypeSelect(event){
-      if (this.selectuploadtype == "Flight Data"){
+      if (this.selectuploadtype == "Aircraft Data"){
         document.getElementById("source").style.display = "none"
       }
       else{
