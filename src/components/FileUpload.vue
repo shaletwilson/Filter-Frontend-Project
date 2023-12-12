@@ -6,7 +6,7 @@
         <h3>Instructions</h3>
         <h5><i>
           * For uploading Aircraft data, 
-          <a :href="sampleFileLink" download="flight_data_sample.xlsx">For sample format click here</a><br>
+          For sample format <a :href="sampleFileLink" download target="_blank">click here</a><br>
           * For uploading Airport Data, please select the source either from AIP or Other source. <br>
           * For AIP use JSON file. for other source choose excel file or CSV <br>
         </i></h5>
@@ -83,7 +83,8 @@ export default {
   },
   data() {
     return {
-      
+      sampleFileLink:require('../assets/files/AIRCRAFT_INFO_SAMPLE.xlsx'),
+
       selectedSource: "",
       selectuploadtype: "",
       selectedFile: null,
