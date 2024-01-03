@@ -129,7 +129,7 @@ export default {
           "selectedSource":this.selectedSource
         }
         try {
-          const response = await axios.post('/import-aircrafts/', formData, {
+          const response = await axios.post('/import-airport-data-aip/', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
