@@ -109,7 +109,7 @@ export default {
           const fileExtension = this.selectedFile.name.split('.').pop().toLowerCase();
 
           // Allowed file extensions
-          const allowedExtensions = ['csv', 'xlsx', 'xls'];
+          const allowedExtensions = ['csv', 'xlsx', 'xls', 'json'];
 
           // Check if the selected file extension is allowed
           if (!allowedExtensions.includes(fileExtension)) {
