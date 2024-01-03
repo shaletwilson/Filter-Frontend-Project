@@ -120,9 +120,10 @@ export default {
         }
       },
     async uploadFile() {
-      
+      console.log("data from upload")
       
       if (this.selectuploadtype == "Airport Data"){
+        console.log("TRUEEEEEEE")
         var formData = {
           "file": this.selectedFile,
           "selectedSource":this.selectedSource
@@ -147,7 +148,8 @@ export default {
           document.getElementById("errorAlert");
         }
       }
-      else if (this.selectuploadtype == "Flight Data"){
+      else if (this.selectuploadtype == "Aircraft Data"){
+        console.log("TRUEEEEEEE")
         var formData = {
           "file": this.selectedFile,
         }

@@ -67,14 +67,14 @@
         <l-marker :lat-lng="{ lat: airport.geometry_coordinates[0], lng: airport.geometry_coordinates[1] }" :icon="createCustomIcon()">
           <l-popup>
             <strong>ID:</strong> {{ airport.id }}<br>
-          <strong>Name:</strong> {{ airport.name }}<br>
-          <strong>Latitude:</strong>{{ airport.geometry_coordinates[0] }}<br>
-          <strong>Longitude:</strong>{{ airport.geometry_coordinates[1] }}<br>
-          <strong>ICAO Code:</strong>{{ airport.icaoCode }}<br>
-          <strong>Country:</strong>{{ airport.country }}<br>
-          <!-- <strong>airport link:</strong><a :href="airport.wikipedia_link" target="_blank">Visit Airport Website</a><br> -->
-          <strong>More Info:</strong><router-link :to="{ name: 'airport-details', params: { id: airport.id } }"><i class="material-icons">visibility</i></router-link>
-        </l-popup>
+            <strong>Name:</strong> {{ airport.name }}<br>
+            <strong>Latitude:</strong>{{ airport.geometry_coordinates[0] }}<br>
+            <strong>Longitude:</strong>{{ airport.geometry_coordinates[1] }}<br>
+            <strong>ICAO Code:</strong>{{ airport.icaoCode }}<br>
+            <strong>Country:</strong>{{ airport.country }}<br>
+            <!-- <strong>airport link:</strong><a :href="airport.wikipedia_link" target="_blank">Visit Airport Website</a><br> -->
+            <strong>More Info:</strong><router-link :to="{ name: 'airport-details', params: { id: airport.id } }"><i class="material-icons">visibility</i></router-link>
+          </l-popup>
         </l-marker>
 
         </div>
