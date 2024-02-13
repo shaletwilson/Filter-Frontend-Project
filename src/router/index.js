@@ -9,6 +9,7 @@ import Details from '../views/DetailsView.vue'
 import AirportDetails from '../views/AirportDetailsView.vue'
 import opsm from '../views/OPSM.vue'
 import UploadView from '../views/UploadView.vue'
+import InfraView from '../views/InfraView'
 
 const routes = [
   {
@@ -40,6 +41,11 @@ const routes = [
     path: '/airports',
     name: 'opsm',
     component: opsm
+  },
+  {
+    path: '/infra',
+    name: 'InfraView',
+    component: InfraView
   },
   {
     path: '/file-upload',

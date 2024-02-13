@@ -64,7 +64,7 @@
         <l-icon :iconUrl="customIconUrl" :iconSize="[32, 32]" iconAnchor="[16, 32]" :popupAnchor="[0, -32]" :className="customIconClass" :id="customIconId"></l-icon>
         
        <div  v-for="(airport, index) in airports">
-        <l-marker :lat-lng="{ lat: airport.geometry_coordinates[0], lng: airport.geometry_coordinates[1] }" :icon="createCustomIcon()">
+        <l-marker :lat-lng="{ lat: airport.geometry_coordinates[0], lng: airport.geometry_coordinates[1] }" :icon="createCustomIcon()" @click="selectMarker(index)">
           <l-popup>
             <strong>ID:</strong> {{ airport.id }}<br>
             <strong>Name:</strong> {{ airport.name }}<br>
@@ -78,7 +78,16 @@
         </l-marker>
 
         </div>
-    
+        <l-polyline v-if="selectedMarkers.length >= 2" :lat-lngs="selectedMarkers" :color="'blue'" :weight="2"></l-polyline>
+        
+        <div v-if="distances.length > 0">
+          <l-tooltip :lat-lng="tooltipPosition">
+          <h1>Distance:</h1>
+          <ul>
+            <li v-for="(distance, index) in distances" :key="index">{{ distance }}</li>
+          </ul>
+        </l-tooltip>
+      </div>
       </l-map>
     </div>
   </template>
@@ -89,6 +98,7 @@
   import "leaflet/dist/leaflet.css";
   import { LMap, LTileLayer, LMarker, LPolyline, LPopup  } from "@vue-leaflet/vue-leaflet";
   import iconurl from '../assets/Airport-icon-bg.png'
+  import haversine from 'haversine-distance';
 
   
   export default {
@@ -119,6 +129,10 @@
           },
           airports: [],
           airportArray: [],
+          selectedMarkers: [],
+          distances: [],
+          distance: 0,
+          tooltipPosition: { lat: 0, lng: 0 },
           // coordinateArray: [
           // [51.9444427490234, 7.77388906478881],
           // [52.6616674, 12.745833],
@@ -186,6 +200,55 @@
 
     
   },
+  selectMarker(index) {
+    console.log("Inside select marker")
+      const selectedAirport = this.airports[index];
+      const selectedCoordinates = [selectedAirport.geometry_coordinates[0], selectedAirport.geometry_coordinates[1]];
+      console.log("selectedAirport", selectedAirport)
+      console.log("selectedCoordinates", selectedCoordinates)
+
+      // Reset the selectedMarkers array when a new marker is selected
+      if (this.selectedMarkers.length === 2) {
+        this.selectedMarkers = [];
+      }
+      
+      // Add the selected marker to the array
+      this.selectedMarkers.push(selectedCoordinates);
+
+      // If there are two markers, calculate and display the distance
+      if (this.selectedMarkers.length >= 2) {
+        this.updatePolyline();
+      }
+    },
+    updatePolyline() {
+  // Calculate distances and update polyline
+      this.distances = [];
+      console.log("data in polyline", this.selectedMarkers)
+      for (let i = 1; i < this.selectedMarkers.length; i++) {
+        const coord1 = this.selectedMarkers[i - 1].map(str => parseFloat(str.trim())); // Convert strings to numbers
+        const coord2 = this.selectedMarkers[i].map(str => parseFloat(str.trim()));
+        console.log("CORDS", coord1, coord2)
+
+        const distance = haversine(coord1, coord2);
+        this.distances.push(distance.toFixed(2) + 'm');
+        console.log("distance in meter", distance);
+      }
+      alert("Distance between pointers in meter:", d)
+      const midpoint = this.calculateMidpoint();
+      this.tooltipPosition = { lat: midpoint[0], lng: midpoint[1] };
+      
+    },
+    calculateMidpoint() {
+      const latSum = this.selectedMarkers.reduce((sum, coords) => sum + coords[0], 0);
+      const lngSum = this.selectedMarkers.reduce((sum, coords) => sum + coords[1], 0);
+      const midpoint = [
+        latSum / this.selectedMarkers.length,
+        lngSum / this.selectedMarkers.length,
+      ];
+      return midpoint;
+    },
+
+  
   }
     
   };

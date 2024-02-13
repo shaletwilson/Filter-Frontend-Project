@@ -28,6 +28,10 @@
 				<span class="material-icons">connecting_airports</span>
 				<span class="text">Airports</span>
 			</router-link>
+			<router-link to="/infra" class="button">
+				<span class="material-icons">info</span>
+				<span class="text">Infrastructure</span>
+			</router-link>
 			<!-- <router-link to="/team" class="button">
 				<span class="material-icons">group</span>
 				<span class="text">Team</span>
