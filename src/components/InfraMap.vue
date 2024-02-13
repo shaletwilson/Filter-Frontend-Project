@@ -65,7 +65,7 @@ export default {
 
     },
     initializeMap() {
-      mapboxgl.accessToken = 'pk.eyJ1IjoiZGlnaXRhbHJhbSIsImEiOiJjbHNrN3NiNG4wMG03MmxybjJ3c3BmN2k3In0.hxaJ9ZCn8fRfivd0LtXYUQ';
+      mapboxgl.accessToken = '';
 
       const map = new mapboxgl.Map({
         container: this.$refs.map,
