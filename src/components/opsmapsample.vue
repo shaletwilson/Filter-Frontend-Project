@@ -232,10 +232,12 @@
         const distance = haversine(coord1, coord2);
         this.distances.push(distance.toFixed(2) + 'm');
         console.log("distance in meter", distance);
+
+        alert("Distance between pointers in meter: " + distance);
+        const midpoint = this.calculateMidpoint();
+        this.tooltipPosition = { lat: midpoint[0], lng: midpoint[1] };
       }
-      alert("Distance between pointers in meter:", d)
-      const midpoint = this.calculateMidpoint();
-      this.tooltipPosition = { lat: midpoint[0], lng: midpoint[1] };
+      
       
     },
     calculateMidpoint() {
