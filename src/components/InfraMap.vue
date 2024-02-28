@@ -452,6 +452,10 @@ this.map.on('idle', () => {
 
       });
     },
+  openAirportDetails(id) {
+    console.log("airportdetails called", id)
+      this.$router.push({ name: 'airport-details', params: { id: id } });
+  },
 
 
     // update marker function
@@ -550,21 +554,30 @@ this.map.on('idle', () => {
   );
 
       // Set marker click event to display popup
-      this.map.on('click', 'unclustered-point', (e) => {
+      const self = this;
+      this.map.on('click', 'unclustered-point', function (e) {
         const { id, name, icaoCode, country } = e.features[0].properties;
+        
         const popupContent = `
           <strong>ID:</strong> ${id}<br>
           <strong>Name:</strong> ${name}<br>
           <strong>ICAO Code:</strong> ${icaoCode}<br>
           <strong>Country:</strong> ${country}<br>
-          <strong>More Info:</strong>
-          
+          <strong>More Info:
+            <a href="#" class="open-airport-details" data-id="${id}"><i class="material-icons">visibility</i></a></strong>
         `;
-        new mapboxgl.Popup()
+        const popup = new mapboxgl.Popup()
           .setLngLat(e.features[0].geometry.coordinates)
           .setHTML(popupContent)
-          .addTo(this.map);
+          .addTo(self.map);
+
+          popup.getElement().querySelector('.open-airport-details').addEventListener('click', function (event) {
+          event.preventDefault();  
+          const id = event.currentTarget.dataset.id;
+          console.log("ID", id)
+          self.openAirportDetails(id); // Call the function
       });
+    });
 
       // Change the cursor to a pointer when hovering over the unclustered-point layer
       this.map.on('mouseenter', 'unclustered-point', () => {
